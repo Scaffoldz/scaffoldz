@@ -8,7 +8,6 @@ import ProjectLayout from "../layouts/ProjectLayout";
 // Auth page
 import Landing from "../page/auth/Landing";
 import Login from "../page/auth/Login";
-import Register from "../page/auth/Register";
 
 // Customer Pages
 import CustomerDashboard from "../page/customer/CustomerDashboard";
@@ -37,6 +36,8 @@ import Quotations from "../page/management/Quotations";
 import ManagementProjects from "../page/management/Projects";
 import ManagementReports from "../page/management/Reports";
 import ManagementUsers from "../page/management/Users";
+import ProjectRequestDetails from "../page/management/ProjectRequestDetails";
+import ProjectBids from "../page/management/ProjectBids";
 
 
 // Project Sub-pages (Contractor View)
@@ -74,7 +75,6 @@ function AppRoutes() {
         <Route element={<AuthLayout />}>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
         </Route>
 
         {/* DASHBOARD LAYOUT WRAPPER */}
@@ -177,6 +177,16 @@ function AppRoutes() {
               <ManagementReports />
             </ProtectedRoute>
           } />
+          <Route path="/management/project-request/:id" element={
+            <ProtectedRoute allowedRoles={["management"]}>
+              <ProjectRequestDetails />
+            </ProtectedRoute>
+          } />
+          <Route path="/management/bids/:id" element={
+            <ProtectedRoute allowedRoles={["management"]}>
+              <ProjectBids />
+            </ProtectedRoute>
+          } />
           <Route path="/management/users" element={
             <ProtectedRoute allowedRoles={["management"]}>
               <ManagementUsers />
@@ -185,7 +195,7 @@ function AppRoutes() {
 
           {/* PROJECT DETAILS (CONTRACTOR ONLY) */}
           <Route path="/project/:id" element={
-            <ProtectedRoute allowedRoles={["contractor"]}>
+            <ProtectedRoute allowedRoles={["contractor", "customer", "management"]}>
               <ProjectLayout />
             </ProtectedRoute>
           }>

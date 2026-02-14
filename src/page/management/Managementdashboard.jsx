@@ -1,100 +1,95 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function ManagementDashboard() {
+  const [projectRequests, setProjectRequests] = useState([]);
+
+  useEffect(() => {
+    // Load requests from localStorage
+    const savedRequests = JSON.parse(localStorage.getItem("projectRequests") || "[]");
+    setProjectRequests(savedRequests);
+  }, []);
+
+  const projects = [
+    { id: 1, name: "Sushma Grande Towers", contractor: "BuildRight Const.", status: "Active", progress: 65, budget: "5.2 Cr" },
+    { id: 2, name: "DLF Mall Renovation", contractor: "Apex Infra", status: "Planning", progress: 10, budget: "1.8 Cr" },
+    { id: 3, name: "City Center Plaza", contractor: "Urban Structures", status: "Completed", progress: 100, budget: "3.5 Cr" },
+  ];
+
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in p-8">
+      {/* Header */}
       <div className="flex justify-between items-end border-b border-gray-200 pb-4">
         <div>
-          <h1 className="text-4xl font-bold text-primary tracking-tight">
-            Management Overview
-          </h1>
-          <p className="text-gray-500 mt-1">Real-time insights across all projects.</p>
-        </div>
-        <div className="flex gap-3">
-          <button className="bg-white border border-gray-300 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-50 font-medium">
-            Export Report
-          </button>
-          <Link to="/submit-project" className="bg-primary text-white px-6 py-2 rounded-lg shadow hover:bg-primary/90 transition-colors font-medium">
-            + New Project
-          </Link>
+          <h1 className="text-3xl font-bold text-primary tracking-tight">Project Overview</h1>
+          <p className="text-gray-500 mt-1">Real-time status of all managed constructions.</p>
         </div>
       </div>
 
-      {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Revenue</p>
-          <h2 className="text-3xl font-extrabold text-primary mt-2">₹ 45.2Cr</h2>
-          <p className="text-xs text-green-500 mt-1 font-semibold">▲ 12% vs last month</p>
+      {/* New Project Requests Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
+        <div className="bg-primary/5 px-6 py-4 border-b border-primary/10 flex justify-between items-center">
+          <h3 className="font-bold text-primary">New Project Requests</h3>
+          <span className="bg-primary text-white text-xs px-2 py-0.5 rounded-full font-bold">{projectRequests.length} New</span>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Active Projects</p>
-          <h2 className="text-3xl font-extrabold text-accent mt-2">12</h2>
-          <p className="text-xs text-gray-400 mt-1">2 completing this week</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Pending Invoices</p>
-          <h2 className="text-3xl font-extrabold text-orange-500 mt-2">5</h2>
-          <p className="text-xs text-gray-400 mt-1">Total: ₹ 1.2Cr</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Contractors</p>
-          <h2 className="text-3xl font-extrabold text-gray-800 mt-2">34</h2>
-          <p className="text-xs text-green-500 mt-1 font-semibold">▲ 3 new added</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Graph Area */}
-        <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-96 flex flex-col">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold text-gray-800">Revenue Trend</h3>
-              <select className="border border-gray-300 rounded-md text-sm p-1">
-                <option>This Year</option>
-                <option>Last Year</option>
-              </select>
-            </div>
-            <div className="flex-1 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-400 bg-gray-50">
-              Revenue Graph Placeholder
-            </div>
-          </div>
-
-          {/* 3D Model Viewer Large */}
-          <div className="bg-white p-1 rounded-xl shadow-sm border border-gray-200">
-            <div className="bg-gray-800 rounded-lg h-80 flex flex-col items-center justify-center text-gray-500 gap-4 group cursor-pointer relative overflow-hidden">
-              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] opacity-10"></div>
-              <span className="text-6xl group-hover:scale-110 transition-transform duration-300 opacity-50 text-accent">🏗️</span>
-              <span className="font-semibold text-lg tracking-wide text-gray-300 z-10">Live Site View (3D Model)</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Side Panel: Recent activity & Allocation */}
-        <div className="space-y-6">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-80 flex flex-col">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Project Status</h3>
-            <div className="flex-1 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-400 bg-gray-50">
-              Donut Chart Placeholder
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Recent Quotations</h3>
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="flex justify-between items-center p-3 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-100 cursor-pointer">
+        <div className="p-6">
+          {projectRequests.length === 0 ? (
+            <p className="text-center text-gray-500 py-4">No new project requests.</p>
+          ) : (
+            <div className="space-y-3">
+              {projectRequests.map(request => (
+                <div key={request.id} className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-100 hover:border-primary/30 transition-all shadow-sm">
                   <div>
-                    <h4 className="font-bold text-gray-700 text-sm">Concrete Works {i}</h4>
-                    <p className="text-xs text-gray-500">Submitted 2h ago</p>
+                    <h4 className="font-bold text-gray-800 text-lg">{request.title}</h4>
+                    <p className="text-sm text-gray-500">Submitted by: <span className="font-medium text-gray-700">{request.customer || "User"}</span> • {new Date(request.submittedAt).toLocaleDateString()}</p>
                   </div>
-                  <span className="text-xs font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">Pending</span>
+                  <Link to={`/management/project-request/${request.id}`} className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 font-bold text-sm transition-colors">
+                    Review Request
+                  </Link>
                 </div>
               ))}
-              <Link to="/management/quotations" className="block text-center text-sm text-accent font-bold mt-4 hover:underline">View All</Link>
             </div>
-          </div>
+          )}
         </div>
+      </div>
+
+      {/* Project Table */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-50 text-gray-700 text-xs uppercase font-bold tracking-wider">
+            <tr>
+              <th className="p-4 border-b border-gray-200">ID</th>
+              <th className="p-4 border-b border-gray-200">Project Name</th>
+              <th className="p-4 border-b border-gray-200">Contractor</th>
+              <th className="p-4 border-b border-gray-200">Budget</th>
+              <th className="p-4 border-b border-gray-200">Status</th>
+              <th className="p-4 border-b border-gray-200 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {projects.map((p) => (
+              <tr key={p.id} className="hover:bg-gray-50/50 transition-colors group">
+                <td className="p-4 text-sm font-semibold text-gray-500">#{p.id}</td>
+                <td className="p-4 text-sm font-bold text-gray-800">{p.name}</td>
+                <td className="p-4 text-sm text-gray-600">{p.contractor}</td>
+                <td className="p-4 text-sm font-medium text-gray-700">₹ {p.budget}</td>
+                <td className="p-4">
+                  <span className={`px-2 py-1 text-xs font-bold rounded ${p.status === 'Active' ? 'bg-green-100 text-green-700' :
+                    p.status === 'Planning' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                    {p.status}
+                  </span>
+                </td>
+                <td className="p-4 text-right">
+                  <Link to={`/project/${p.id}/overview`} className="text-primary font-bold text-sm hover:underline">
+                    View Details
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

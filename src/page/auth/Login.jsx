@@ -32,13 +32,12 @@ function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="bg-white p-10 rounded-xl shadow-md w-full max-w-md space-y-8 animate-fade-in border border-gray-100">
+      <div className="bg-white p-10 rounded-lg shadow-sm border border-gray-200 w-full max-w-md space-y-8 animate-fade-in">
         <div className="text-center">
-          <h1 className="text-4xl mb-2">🏗️</h1>
           <h2 className="text-3xl font-bold text-primary tracking-tight">
             Scaffoldz
           </h2>
-          <p className="text-gray-500 mt-2 text-sm">Secure Sign In</p>
+          <p className="text-gray-500 mt-2 text-sm">Sign in to your account</p>
         </div>
 
         <form className="space-y-6">
@@ -48,7 +47,7 @@ function Login() {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+              className="w-full border border-gray-300 p-3 rounded-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
             >
               <option value="customer">Customer</option>
               <option value="contractor">Contractor</option>
@@ -63,7 +62,7 @@ function Login() {
               placeholder="name@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-gray-400"
+              className="w-full border border-gray-300 p-3 rounded-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400"
             />
           </div>
 
@@ -71,22 +70,22 @@ function Login() {
             <label className="text-sm font-semibold text-gray-700">Password</label>
             <input
               type="password"
-              placeholder="••••••••"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-gray-400"
+              className="w-full border border-gray-300 p-3 rounded-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400"
             />
           </div>
 
           {showOtp && (
             <div className="space-y-2 animate-fade-in">
-              <label className="text-sm font-semibold text-gray-700">One-Time Password (OTP)</label>
+              <label className="text-sm font-semibold text-gray-700">One-Time Password</label>
               <input
                 type="text"
                 placeholder="Enter 4-digit OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                className="w-full border border-accent p-3 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all placeholder:text-gray-400 bg-accent/5"
+                className="w-full border border-accent p-3 rounded-md focus:ring-1 focus:ring-accent focus:border-accent outline-none transition-all placeholder:text-gray-400 bg-gray-50"
               />
             </div>
           )}
@@ -94,14 +93,14 @@ function Login() {
           {!showOtp ? (
             <button
               onClick={handleGenerateOtp}
-              className="w-full bg-primary text-white font-bold py-3.5 rounded-lg hover:bg-primary/90 transition-all shadow-md active:scale-[0.98]"
+              className="w-full bg-primary text-white font-bold py-3 rounded-md hover:bg-primary/90 transition-all shadow-sm active:scale-[0.98]"
             >
               Generate OTP
             </button>
           ) : (
             <button
               onClick={handleLogin}
-              className="w-full bg-green-600 text-white font-bold py-3.5 rounded-lg hover:bg-green-700 transition-all shadow-md active:scale-[0.98]"
+              className="w-full bg-green-700 text-white font-bold py-3 rounded-md hover:bg-green-800 transition-all shadow-sm active:scale-[0.98]"
             >
               Verify & Login
             </button>
