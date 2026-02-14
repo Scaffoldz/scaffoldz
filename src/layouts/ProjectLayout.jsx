@@ -1,7 +1,13 @@
-import { Outlet, NavLink, useParams } from "react-router-dom";
+import { Outlet, NavLink, useParams, Navigate } from "react-router-dom";
 
 function ProjectLayout() {
   const { id } = useParams();
+  const userRole = localStorage.getItem("userRole");
+
+  // STRICT RULE: Only Contractors can see this layout
+  if (userRole !== "contractor") {
+    return <Navigate to="/login" replace />;
+  }
 
   const links = [
     { to: "overview", label: "Overview", icon: "📑" },
@@ -18,7 +24,7 @@ function ProjectLayout() {
   return (
     <div className="flex h-full gap-6 animate-fade-in px-2">
 
-      {/* Inner Sidebar */}
+      {/* Inner Sidebar - Contractor Specific */}
       <aside className="w-64 flex-shrink-0">
         <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden sticky top-6">
           <div className="bg-primary/5 p-4 border-b border-primary/10">
