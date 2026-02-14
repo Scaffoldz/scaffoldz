@@ -32,6 +32,9 @@ function Sidebar() {
               <NavLink to="/contractor/dashboard" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
                 Dashboard
               </NavLink>
+              <NavLink to="/contractor/available-projects" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
+                Available Tenders
+              </NavLink>
               <NavLink to="/contractor/my-bids" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
                 My Bids
               </NavLink>

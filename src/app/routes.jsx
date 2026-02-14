@@ -40,7 +40,7 @@ import ProjectRequestDetails from "../page/management/ProjectRequestDetails";
 import ProjectBids from "../page/management/ProjectBids";
 
 
-// Project Sub-pages (Contractor View)
+// Project Sub-pages
 import Overview from "../page/projects/Overview";
 import Budget from "../page/projects/Budget";
 import Timeline from "../page/projects/Timeline";
@@ -50,6 +50,8 @@ import Updates from "../page/projects/Updates";
 import Attendance from "../page/projects/Attendance";
 import Materials from "../page/projects/Materials";
 import InternalNotes from "../page/projects/InternalNotes";
+import ThreeDView from "../page/projects/ThreeDView";
+import ProjectMessages from "../page/projects/ProjectMessages";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -134,22 +136,6 @@ function AppRoutes() {
               <ActiveProjects />
             </ProtectedRoute>
           } />
-          <Route path="/contractor/labour-management" element={
-            <ProtectedRoute allowedRoles={["contractor"]}>
-              <LabourManagement />
-            </ProtectedRoute>
-          } />
-          <Route path="/contractor/upload-photos" element={
-            <ProtectedRoute allowedRoles={["contractor"]}>
-              <UploadPhotos />
-            </ProtectedRoute>
-          } />
-          <Route path="/contractor/contact-client" element={
-            <ProtectedRoute allowedRoles={["contractor"]}>
-              <ContactClient />
-            </ProtectedRoute>
-          } />
-
 
           {/* MANAGEMENT ROUTES */}
           <Route path="/management/dashboard" element={
@@ -208,11 +194,17 @@ function AppRoutes() {
             <Route path="attendance" element={<Attendance />} />
             <Route path="materials" element={<Materials />} />
             <Route path="notes" element={<InternalNotes />} />
+            <Route path="3d-view" element={<ThreeDView />} />
+            <Route path="messages" element={<ProjectMessages />} />
+            {/* Relocated Contractor Features */}
+            <Route path="labour-management" element={<LabourManagement />} />
+            <Route path="upload-photos" element={<UploadPhotos />} />
+            <Route path="contact-client" element={<ContactClient />} />
           </Route>
         </Route>
 
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 function UploadPhotos() {
+    const { id } = useParams();
     const [photos] = useState([
         { id: 1, url: "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&w=400&q=80", date: "2024-02-14", tag: "Foundation" },
         { id: 2, url: "https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&w=400&q=80", date: "2024-02-13", tag: "Column Work" },

@@ -23,10 +23,10 @@ function ProjectLayout() {
     ];
   } else if (userRole === "contractor") {
     links = [
-      { to: "overview", label: "Work Details" }, // Reusing overview or creating specific
-      { to: "labour-management", label: "Labour Management" }, // Placeholder
-      { to: "upload-photos", label: "Upload Photos" }, // Placeholder
-      { to: "contact-client", label: "Message Client" }, // Placeholder
+      { to: "overview", label: "Work Details" },
+      { to: "labour-management", label: "Labour Management" },
+      { to: "upload-photos", label: "Upload Photos" },
+      { to: "contact-client", label: "Message Client" },
     ];
   }
 

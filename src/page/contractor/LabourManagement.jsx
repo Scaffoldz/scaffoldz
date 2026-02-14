@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 function LabourManagement() {
+    const { id } = useParams();
     const [workers] = useState([
         { id: 1, name: "Rahul Sharma", role: "Mason", status: "Present", shift: "Morning", dailyWage: 800 },
         { id: 2, name: "Amit Patel", role: "Helper", status: "Present", shift: "Morning", dailyWage: 500 },

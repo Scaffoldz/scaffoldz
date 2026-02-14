@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 function ContactClient() {
+    const { id } = useParams();
     const [messages] = useState([
         { id: 1, sender: "You", text: "The foundation piling for Sector 4 is complete. Requesting your presence for inspection tomorrow.", time: "10:30 AM", status: "Read" },
         { id: 2, sender: "Management", text: "Inspection scheduled for 2 PM tomorrow. Our structural engineer will be there.", time: "11:15 AM", status: "Received" },
@@ -34,8 +36,8 @@ function ContactClient() {
                     {messages.map((msg) => (
                         <div key={msg.id} className={`flex flex-col ${msg.sender === "You" ? "items-end" : "items-start"}`}>
                             <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm text-sm ${msg.sender === "You"
-                                    ? "bg-primary text-white rounded-tr-none"
-                                    : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
+                                ? "bg-primary text-white rounded-tr-none"
+                                : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
                                 }`}>
                                 {msg.text}
                             </div>

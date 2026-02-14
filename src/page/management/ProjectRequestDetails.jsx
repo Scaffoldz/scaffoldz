@@ -31,6 +31,8 @@ function ProjectRequestDetails() {
             const newQuotation = {
                 id: `Q-${Date.now()}`, // Generate Quotation ID
                 project: request.title,
+                location: request.location,
+                description: request.description,
                 contractor: "Pending Assignment",
                 amount: `₹ ${request.budget}`,
                 status: "Pending",

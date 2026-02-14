@@ -2,12 +2,20 @@ import { useState, useEffect } from "react";
 
 function AvailableProjects() {
     const [projects, setProjects] = useState([]);
+    const [selectedProject, setSelectedProject] = useState(null);
     const [bidData, setBidData] = useState({
         amount: "",
         timeline: "",
         experience: "",
         resourcePlan: ""
     });
+
+    useEffect(() => {
+        // Load pending quotations (Open for bidding)
+        const allQuotations = JSON.parse(localStorage.getItem("quotations") || "[]");
+        const openProjects = allQuotations.filter(q => q.status === "Pending");
+        setProjects(openProjects);
+    }, []);
 
     const handleBidClick = (project) => {
         setSelectedProject(project);
@@ -77,7 +85,12 @@ function AvailableProjects() {
                                 <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Open</span>
                             </div>
 
-                            <div className="space-y-2 mb-6">
+                            <div className="space-y-2 mb-4">
+                                <p className="text-sm text-gray-600 line-clamp-2">{p.description}</p>
+                                <p className="text-sm text-gray-500">📍 {p.location}</p>
+                            </div>
+
+                            <div className="space-y-2 mb-6 border-t border-gray-50 pt-4">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-gray-500">Estimated Budget:</span>
                                     <span className="font-bold text-gray-700">{p.amount}</span>
@@ -106,6 +119,9 @@ function AvailableProjects() {
                         <div className="border-b border-gray-100 pb-4 mb-6 text-primary">
                             <h3 className="text-2xl font-bold">Bid Proposal: {selectedProject.project}</h3>
                             <p className="text-sm text-gray-500 mt-1">Provide detailed information to increase your chances of selection.</p>
+                            <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600 border border-gray-100 italic">
+                                "{selectedProject.description}"
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
