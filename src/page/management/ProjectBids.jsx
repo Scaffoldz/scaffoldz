@@ -56,6 +56,19 @@ function ProjectBids() {
             });
 
             localStorage.setItem("quotations", JSON.stringify(updatedQuotations));
+
+            // Create Notification for Customer
+            const notifications = JSON.parse(localStorage.getItem("notifications") || "[]");
+            notifications.push({
+                id: Date.now(),
+                title: "Contractor Assigned!",
+                message: `${lowestBid.contractor} has been selected for project: ${quotation.project}. Your project is now active.`,
+                timestamp: new Date().toISOString(),
+                read: false,
+                projectId: id
+            });
+            localStorage.setItem("notifications", JSON.stringify(notifications));
+
             alert(`Project assigned to ${lowestBid.contractor}!`);
             navigate("/management/quotations");
         }

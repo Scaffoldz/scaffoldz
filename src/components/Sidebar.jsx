@@ -67,6 +67,18 @@ function Sidebar() {
 
       </nav>
 
+      <div className="p-4 border-t border-white/10 mx-4">
+        <button
+          onClick={() => {
+            localStorage.removeItem("userRole");
+            window.location.href = "/";
+          }}
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium text-white/60 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200"
+        >
+          <span>🚪</span> Logout
+        </button>
+      </div>
+
       <div className="p-4 border-t border-white/10 mx-4 text-xs text-center text-white/40">
         &copy; 2026 Scaffoldz Inc.
       </div>

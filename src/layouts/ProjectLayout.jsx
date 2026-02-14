@@ -51,10 +51,19 @@ function ProjectLayout() {
               </NavLink>
             ))}
           </nav>
-          <div className="p-4 border-t border-gray-100">
-            <NavLink to={`/${userRole}/dashboard`} className="text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-1">
+          <div className="p-4 border-t border-gray-100 flex flex-col gap-3">
+            <NavLink to={`/${userRole}/dashboard`} className="text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-1 font-medium">
               ← Back to Dashboard
             </NavLink>
+            <button
+              onClick={() => {
+                localStorage.removeItem("userRole");
+                window.location.href = "/";
+              }}
+              className="text-left text-xs text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 font-medium"
+            >
+              🚪 Logout Account
+            </button>
           </div>
         </div>
       </aside>
