@@ -8,6 +8,7 @@ import ProjectLayout from "../layouts/ProjectLayout";
 // Auth page
 import Landing from "../page/auth/Landing";
 import Login from "../page/auth/Login";
+import Signup from "../page/auth/Signup";
 
 // Customer Pages
 import CustomerDashboard from "../page/customer/CustomerDashboard";
@@ -77,6 +78,7 @@ function AppRoutes() {
         <Route element={<AuthLayout />}>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Route>
 
         {/* DASHBOARD LAYOUT WRAPPER */}
