@@ -17,7 +17,8 @@ router.get('/', authenticate, async (req, res, next) => {
             queryText = `
         SELECT p.*, 
                u.full_name as customer_name,
-               c.full_name as contractor_name
+               c.full_name as contractor_name,
+               (SELECT COUNT(*) FROM bids WHERE project_id = p.id) as bid_count
         FROM projects p
         LEFT JOIN users u ON p.customer_id = u.id
         LEFT JOIN users c ON p.assigned_contractor_id = c.id
@@ -72,7 +73,8 @@ router.get('/:id', authenticate, async (req, res, next) => {
         const result = await query(
             `SELECT p.*,
               u.full_name as customer_name, u.email as customer_email, u.phone as customer_phone,
-              c.full_name as contractor_name, c.email as contractor_email, c.phone as contractor_phone
+              c.full_name as contractor_name, c.email as contractor_email, c.phone as contractor_phone,
+              (SELECT COUNT(*) FROM bids WHERE project_id = p.id) as bid_count
        FROM projects p
        LEFT JOIN users u ON p.customer_id = u.id
        LEFT JOIN users c ON p.assigned_contractor_id = c.id
@@ -120,7 +122,7 @@ router.post('/', authenticate, authorize('customer'), async (req, res, next) => 
 router.put('/:id', authenticate, async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { title, description, location, budget, startDate, deadline, status, assignedContractorId } = req.body;
+        const { title, description, location, budget, startDate, deadline, bidding_deadline, status, assignedContractorId } = req.body;
         const { role, id: userId } = req.user;
 
         // Check if project exists and user has permission
@@ -165,6 +167,10 @@ router.put('/:id', authenticate, async (req, res, next) => {
         if (deadline !== undefined) {
             updates.push(`deadline = $${paramCount++}`);
             values.push(deadline);
+        }
+        if (bidding_deadline !== undefined) {
+            updates.push(`bidding_deadline = $${paramCount++}`);
+            values.push(bidding_deadline);
         }
         if (status !== undefined && role === 'management') {
             updates.push(`status = $${paramCount++}`);

@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 function ContactClient() {
     const { id } = useParams();
-    const [messages] = useState([
-        { id: 1, sender: "You", text: "The foundation piling for Sector 4 is complete. Requesting your presence for inspection tomorrow.", time: "10:30 AM", status: "Read" },
-        { id: 2, sender: "Management", text: "Inspection scheduled for 2 PM tomorrow. Our structural engineer will be there.", time: "11:15 AM", status: "Received" },
-        { id: 3, sender: "You", text: "Great. I'll have the site records ready.", time: "11:20 AM", status: "Sent" },
-    ]);
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                setLoading(true);
+                // In Phase 4, we'll fetch real messages for this project/id
+                // For now, removing demo chat as requested.
+                setMessages([]);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMessages();
+    }, [id]);
 
     return (
         <div className="h-[calc(100vh-14rem)] flex flex-col space-y-6 animate-fade-in">
@@ -33,25 +47,32 @@ function ContactClient() {
 
                 {/* Messages Area */}
                 <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-gray-50/50">
-                    {messages.map((msg) => (
-                        <div key={msg.id} className={`flex flex-col ${msg.sender === "You" ? "items-end" : "items-start"}`}>
-                            <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm text-sm ${msg.sender === "You"
-                                ? "bg-primary text-white rounded-tr-none"
-                                : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
-                                }`}>
-                                {msg.text}
-                            </div>
-                            <div className={`mt-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider ${msg.sender === "You" ? "text-primary" : "text-gray-400"
-                                }`}>
-                                {msg.sender} • {msg.time} {msg.sender === "You" && `• ${msg.status}`}
-                            </div>
+                    {loading ? (
+                        <div className="flex justify-center items-center h-full">
+                            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Loading conversations...</p>
                         </div>
-                    ))}
-                    <div className="text-center py-4">
-                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest px-3 py-1 bg-white border border-gray-200 rounded-full">
-                            Today
-                        </span>
-                    </div>
+                    ) : messages.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
+                            <span className="text-4xl opacity-20">💬</span>
+                            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No active conversations found</p>
+                            <p className="text-gray-400 text-[10px] max-w-[200px]">Send a message to management to start a discussion about this project.</p>
+                        </div>
+                    ) : (
+                        messages.map((msg) => (
+                            <div key={msg.id} className={`flex flex-col ${msg.sender === "You" ? "items-end" : "items-start"}`}>
+                                <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm text-sm ${msg.sender === "You"
+                                    ? "bg-primary text-white rounded-tr-none"
+                                    : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
+                                    }`}>
+                                    {msg.text}
+                                </div>
+                                <div className={`mt-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider ${msg.sender === "You" ? "text-primary" : "text-gray-400"
+                                    }`}>
+                                    {msg.sender} • {msg.time} {msg.sender === "You" && `• ${msg.status}`}
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
 
                 {/* Input Area */}

@@ -1,11 +1,30 @@
+import { useState, useEffect } from "react";
+import api from "../../services/api";
+
 function Users() {
-    const users = [
-        { name: "Rahul Sharma", email: "rahul@example.com", role: "Customer", status: "Active", lastLogin: "2 hours ago", initial: "RS" },
-        { name: "BuildRight Const.", email: "ops@buildright.in", role: "Contractor", status: "Active", lastLogin: "45 mins ago", initial: "BC" },
-        { name: "Apex Infra", email: "admin@apexinfra.com", role: "Contractor", status: "Suspended", lastLogin: "3 days ago", initial: "AI" },
-        { name: "John Doe", email: "john.d@client.com", role: "Customer", status: "Active", lastLogin: "10 mins ago", initial: "JD" },
-        { name: "Modern Builders", email: "contact@modern.com", role: "Contractor", status: "Pending", lastLogin: "Never", initial: "MB" },
-    ];
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                setLoading(true);
+                const response = await api.users.getAll();
+                // Ensure the data is in the expected format (id, name, email, role, status)
+                // If backend fields differ, we might need a mapping here.
+                setUsers(response.users || []);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUsers();
+    }, []);
+
+    if (loading) return <div className="p-8 text-center text-gray-500">Loading users...</div>;
+    if (error) return <div className="p-8 text-center text-red-500">Error: {error}</div>;
 
     return (
         <div className="space-y-8 animate-fade-in p-8">
@@ -39,14 +58,14 @@ function Users() {
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                         {users.map((u, i) => (
-                            <tr key={i} className="hover:bg-gray-50/50 transition-colors group">
+                            <tr key={u.id || i} className="hover:bg-gray-50/50 transition-colors group">
                                 <td className="p-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm border border-primary/20">
-                                            {u.initial}
+                                            {(u.fullName || u.name || "U").split(" ").map(n => n[0]).join("")}
                                         </div>
                                         <div>
-                                            <p className="font-bold text-gray-800 text-sm">{u.name}</p>
+                                            <p className="font-bold text-gray-800 text-sm">{u.fullName || u.name}</p>
                                             <p className="text-xs text-gray-400">{u.email}</p>
                                         </div>
                                     </div>
@@ -59,12 +78,12 @@ function Users() {
                                 </td>
                                 <td className="p-4">
                                     <span className={`px-2 py-1 text-[10px] font-bold rounded ${u.status === 'Active' ? 'bg-green-100 text-green-700' :
-                                            u.status === 'Suspended' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'
+                                        u.status === 'Suspended' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'
                                         }`}>
                                         {u.status}
                                     </span>
                                 </td>
-                                <td className="p-4 text-xs text-gray-500 font-medium">{u.lastLogin}</td>
+                                <td className="p-4 text-xs text-gray-500 font-medium">{u.last_login || "Never"}</td>
                                 <td className="p-4 text-right">
                                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button className="text-gray-400 hover:text-primary font-bold text-xs p-1.5 hover:bg-primary/5 rounded">Manage</button>
@@ -73,6 +92,11 @@ function Users() {
                                 </td>
                             </tr>
                         ))}
+                        {users.length === 0 && (
+                            <tr>
+                                <td colSpan="5" className="p-12 text-center text-gray-400 italic">No users found in the system.</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

@@ -48,6 +48,7 @@ CREATE TABLE projects (
     budget DECIMAL(15, 2),
     start_date DATE,
     deadline DATE,
+    bidding_deadline TIMESTAMP,
     status VARCHAR(50) DEFAULT 'Submitted' CHECK (status IN ('Submitted', 'Under Review', 'Bidding', 'Assigned', 'In Progress', 'Completed', 'On Hold', 'Cancelled')),
     customer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     assigned_contractor_id INTEGER REFERENCES users(id) ON DELETE SET NULL,

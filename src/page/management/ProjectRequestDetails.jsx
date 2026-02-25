@@ -1,64 +1,65 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../../services/api";
 
 function ProjectRequestDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [request, setRequest] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Find request by ID
-        const savedRequests = JSON.parse(localStorage.getItem("projectRequests") || "[]");
-        const foundRequest = savedRequests.find(r => r.id === id);
-        if (foundRequest) {
-            setRequest(foundRequest);
-        } else {
-            alert("Request not found!");
-            navigate("/management/dashboard");
-        }
-    }, [id, navigate]);
+        const fetchRequest = async () => {
+            try {
+                setLoading(true);
+                const data = await api.projects.getById(id);
+                setRequest(data.project);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const handleAccept = () => {
+        fetchRequest();
+    }, [id]);
+
+    const handleAccept = async () => {
         const confirm = window.confirm("Accept this project request? It will be moved to Quotations for tendering.");
         if (confirm) {
-            // 1. Remove from Requests
-            const savedRequests = JSON.parse(localStorage.getItem("projectRequests") || "[]");
-            const updatedRequests = savedRequests.filter(r => r.id !== id);
-            localStorage.setItem("projectRequests", JSON.stringify(updatedRequests));
+            try {
+                // Set bidding deadline to 24 hours from now
+                const deadline = new Date();
+                deadline.setHours(deadline.getHours() + 24);
 
-            // 2. Add to Quotations (Dynamic Data)
-            const savedQuotations = JSON.parse(localStorage.getItem("quotations") || "[]");
-            const newQuotation = {
-                id: `Q-${Date.now()}`, // Generate Quotation ID
-                project: request.title,
-                location: request.location,
-                description: request.description,
-                contractor: "Pending Assignment",
-                amount: `₹ ${request.budget}`,
-                status: "Pending",
-                originalRequestId: request.id
-            };
-            localStorage.setItem("quotations", JSON.stringify([newQuotation, ...savedQuotations]));
-
-            alert("Project Accepted. Moved to Quotations.");
-            navigate("/management/quotations");
+                await api.projects.update(id, {
+                    status: 'Bidding',
+                    bidding_deadline: deadline.toISOString() // This maps to bidding_deadline in my planned logic/migration script
+                });
+                alert("Project Accepted. Moved to Quotations.");
+                navigate("/management/quotations");
+            } catch (err) {
+                alert("Failed to accept project: " + err.message);
+            }
         }
     };
 
-    const handleReject = () => {
+    const handleReject = async () => {
         const confirm = window.confirm("Reject this project request?");
         if (confirm) {
-            // Remove from Requests
-            const savedRequests = JSON.parse(localStorage.getItem("projectRequests") || "[]");
-            const updatedRequests = savedRequests.filter(r => r.id !== id);
-            localStorage.setItem("projectRequests", JSON.stringify(updatedRequests));
-
-            alert("Project Rejected.");
-            navigate("/management/dashboard");
+            try {
+                await api.projects.update(id, { status: 'Cancelled' });
+                alert("Project Rejected.");
+                navigate("/management/dashboard");
+            } catch (err) {
+                alert("Failed to reject project: " + err.message);
+            }
         }
     };
 
-    if (!request) return <div className="p-8">Loading request details...</div>;
+    if (loading) return <div className="p-8 text-center text-gray-500">Loading request details...</div>;
+    if (error) return <div className="p-8 text-center text-red-500">Error: {error}</div>;
 
     return (
         <div className="space-y-8 animate-fade-in max-w-4xl mx-auto py-8 px-4">
@@ -105,15 +106,15 @@ function ProjectRequestDetails() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-100">
                     <div>
                         <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Estimated Budget</span>
-                        <p className="text-xl font-bold text-primary">₹ {request.budget}</p>
+                        <p className="text-xl font-bold text-primary">₹ {Number(request.budget).toLocaleString()}</p>
                     </div>
                     <div>
-                        <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Start Date</span>
-                        <p className="text-gray-700 font-medium">{request.startDate}</p>
+                        <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Expected Duration</span>
+                        <p className="text-gray-700 font-medium">{request.duration_months || request.durationMonths || '12'} Months</p>
                     </div>
                     <div>
-                        <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Requested Deadline</span>
-                        <p className="text-gray-700 font-medium">{request.deadline}</p>
+                        <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Created At</span>
+                        <p className="text-gray-700 font-medium">{new Date(request.created_at || request.createdAt).toLocaleDateString()}</p>
                     </div>
                 </div>
 

@@ -1,26 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import api from "../../services/api";
 
 function ProjectMessages() {
-    const [messages, setMessages] = useState([
-        { id: 1, sender: "Management", text: "Rahul, we've updated the foundation schedule. Please check the timeline.", time: "10:30 AM", type: "received" },
-        { id: 2, sender: "Me", text: "Got it. Will the cement delivery still arrive by 4 PM?", time: "10:45 AM", type: "sent" },
-        { id: 3, sender: "Management", text: "Yes, the vendor confirmed the slot.", time: "10:52 AM", type: "received" },
-        { id: 4, sender: "Management", text: "Also, please upload the site clearance photos.", time: "11:05 AM", type: "received" },
-    ]);
-
+    const { id } = useParams();
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [input, setInput] = useState("");
+    const userRole = localStorage.getItem("userRole") || "customer";
+    const messagesEndRef = useRef(null);
 
-    const handleSend = () => {
-        if (!input.trim()) return;
-        const newMessage = {
-            id: Date.now(),
-            sender: "Me",
-            text: input,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            type: "sent",
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                if (loading) setLoading(true);
+                const data = await api.messages.getByProject(id);
+                setMessages(data.messages || []);
+                setError(null);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
         };
-        setMessages([...messages, newMessage]);
-        setInput("");
+
+        fetchMessages();
+        // Poll every 5 seconds for basic "real-time" experience
+        const interval = setInterval(fetchMessages, 5000);
+        return () => clearInterval(interval);
+    }, [id]);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
+    const handleSend = async () => {
+        if (!input.trim()) return;
+
+        const messageText = input;
+        setInput(""); // Clear immediately for UX
+
+        try {
+            const data = await api.messages.send({
+                project_id: id,
+                text: messageText,
+                sender_role: userRole
+            });
+            setMessages([...messages, data.message]);
+        } catch (err) {
+            alert("Failed to send message: " + err.message);
+        }
     };
 
     return (
@@ -48,23 +82,40 @@ function ProjectMessages() {
 
                 {/* Message Feed */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                    <div className="text-center">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] bg-white px-3 py-1 rounded-full border border-gray-100">Today</span>
-                    </div>
-
-                    {messages.map((m) => (
-                        <div key={m.id} className={`flex ${m.type === 'sent' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-md ${m.type === 'sent' ? 'order-1' : 'order-2'}`}>
-                                <div className={`p-4 rounded-2xl shadow-sm text-sm ${m.type === 'sent' ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none'
-                                    }`}>
-                                    {m.text}
-                                </div>
-                                <p className={`text-[10px] mt-1 font-medium ${m.type === 'sent' ? 'text-right text-gray-400' : 'text-left text-gray-500'}`}>
-                                    {m.sender} • {m.time}
-                                </p>
-                            </div>
+                    {loading ? (
+                        <div className="flex justify-center items-center h-full">
+                            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Loading messages...</p>
                         </div>
-                    ))}
+                    ) : messages.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
+                            <span className="text-4xl opacity-20">💬</span>
+                            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No project messages found</p>
+                            <p className="text-gray-400 text-[10px] max-w-[200px]">Start a conversation with the management team about this project.</p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="text-center">
+                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] bg-white px-3 py-1 rounded-full border border-gray-100">Today</span>
+                            </div>
+                            {messages.map((m) => {
+                                const isMe = m.sender_role === userRole;
+                                return (
+                                    <div key={m.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                                        <div className={`max-w-md ${isMe ? 'order-1' : 'order-2'}`}>
+                                            <div className={`p-4 rounded-2xl shadow-sm text-sm ${isMe ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none'
+                                                }`}>
+                                                {m.text}
+                                            </div>
+                                            <p className={`text-[10px] mt-1 font-bold uppercase ${isMe ? 'text-right text-gray-400' : 'text-left text-gray-500'}`}>
+                                                {m.sender_role} • {new Date(m.created_at || m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                            <div ref={messagesEndRef} />
+                        </>
+                    )}
                 </div>
 
                 {/* Chat Input */}
