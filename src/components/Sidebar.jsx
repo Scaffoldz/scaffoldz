@@ -1,12 +1,22 @@
 import { NavLink } from "react-router-dom";
 
-function Sidebar() {
+/* eslint-disable react/prop-types */
+function Sidebar({ onMinimize }) {
   const userRole = localStorage.getItem("userRole") || "customer";
 
   return (
     <div className="w-64 bg-primary text-gray-100 flex flex-col h-full shadow-lg z-10 font-sans border-r border-gray-800">
-      <div className="p-6 text-xl font-bold border-b border-white/10 tracking-tight flex items-center gap-3">
-        Scaffoldz
+      <div className="p-6 text-xl font-bold border-b border-white/10 tracking-tight flex items-center justify-between">
+        <span className="flex items-center gap-3">Scaffoldz</span>
+        <button
+          onClick={onMinimize}
+          className="p-1.5 hover:bg-white/10 rounded-md text-white/60 hover:text-white transition-colors"
+          title="Hide Sidebar"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><line x1="9" x2="9" y1="3" y2="21" />
+          </svg>
+        </button>
       </div>
 
       <nav className="flex-1 p-4 space-y-8 overflow-y-auto">
