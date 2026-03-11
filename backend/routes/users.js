@@ -15,7 +15,7 @@ router.post('/', async (req, res, next) => {
         }
 
         // Validate role
-        if (!['customer', 'contractor', 'management'].includes(role)) {
+        if (!['customer', 'contractor', 'management', 'vendor'].includes(role)) {
             return res.status(400).json({ error: 'Invalid role' });
         }
 

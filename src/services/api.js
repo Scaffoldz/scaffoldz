@@ -290,6 +290,57 @@ export const messages = {
     },
 };
 
+// Procurement API
+export const procurement = {
+    // Contractor: Create material request
+    createRequest: async (requestData) => {
+        return apiRequest('/procurement/requests', {
+            method: 'POST',
+            body: JSON.stringify(requestData),
+        });
+    },
+
+    // Contractor/Customer: Get all requests & nested quotes for a specific project
+    getProjectRequests: async (projectId) => {
+        return apiRequest(`/procurement/requests/project/${projectId}`);
+    },
+
+    // Contractor: Get all requests across all projects
+    getContractorRequests: async () => {
+        return apiRequest('/procurement/requests/contractor');
+    },
+
+    // Vendor: Get open material requests
+    getOpenRequests: async () => {
+        return apiRequest('/procurement/requests/open');
+    },
+
+    // Vendor: Submit quote
+    submitQuotation: async (quotationData) => {
+        return apiRequest('/procurement/quotations', {
+            method: 'POST',
+            body: JSON.stringify(quotationData),
+        });
+    },
+
+    // Vendor: Get submitted quotes
+    getVendorQuotations: async () => {
+        return apiRequest('/procurement/quotations/vendor');
+    },
+
+    // Contractor: Approve quote
+    approveQuotation: async (quotationId) => {
+        return apiRequest(`/procurement/quotations/${quotationId}/approve`, {
+            method: 'PUT',
+        });
+    },
+
+    // Vendor: Get assigned supply orders
+    getVendorOrders: async () => {
+        return apiRequest('/procurement/orders/vendor');
+    },
+};
+
 export default {
     auth,
     users,
@@ -301,4 +352,5 @@ export default {
     materials,
     attendance,
     messages,
+    procurement,
 };

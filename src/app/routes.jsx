@@ -25,6 +25,7 @@ import ContractorDashboard from "../page/contractor/ContractorDashboard";
 import AvailableProjects from "../page/contractor/AvailableProjects";
 import MyBids from "../page/contractor/MyBids";
 import ActiveProjects from "../page/contractor/ActiveProjects";
+import MyRequests from "../page/contractor/MyRequests";
 import LabourManagement from "../page/contractor/LabourManagement";
 import UploadPhotos from "../page/contractor/UploadPhotos";
 import ContactClient from "../page/contractor/ContactClient";
@@ -40,6 +41,13 @@ import ManagementUsers from "../page/management/Users";
 import ProjectRequestDetails from "../page/management/ProjectRequestDetails";
 import ProjectBids from "../page/management/ProjectBids";
 
+import VendorDashboard from "../page/vendor/VendorDashboard";
+import MaterialQuotations from "../page/vendor/MaterialQuotations";
+import SubmitQuotation from "../page/vendor/SubmitQuotation";
+import MyQuotations from "../page/vendor/MyQuotations";
+import SupplyOrders from "../page/vendor/SupplyOrders";
+import SupplyHistory from "../page/vendor/SupplyHistory";
+
 
 // Project Sub-pages
 import Overview from "../page/projects/Overview";
@@ -53,6 +61,7 @@ import Materials from "../page/projects/Materials";
 import InternalNotes from "../page/projects/InternalNotes";
 import ThreeDView from "../page/projects/ThreeDView";
 import ProjectMessages from "../page/projects/ProjectMessages";
+import ProjectProcurement from "../page/projects/ProjectProcurement";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -138,6 +147,11 @@ function AppRoutes() {
               <ActiveProjects />
             </ProtectedRoute>
           } />
+          <Route path="/contractor/material-requests" element={
+            <ProtectedRoute allowedRoles={["contractor"]}>
+              <MyRequests />
+            </ProtectedRoute>
+          } />
 
           {/* MANAGEMENT ROUTES */}
           <Route path="/management/dashboard" element={
@@ -181,6 +195,38 @@ function AppRoutes() {
             </ProtectedRoute>
           } />
 
+          {/* VENDOR ROUTES */}
+          <Route path="/vendor/dashboard" element={
+            <ProtectedRoute allowedRoles={["vendor"]}>
+              <VendorDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/vendor/quotations" element={
+            <ProtectedRoute allowedRoles={["vendor"]}>
+              <MaterialQuotations />
+            </ProtectedRoute>
+          } />
+          <Route path="/vendor/submit-quotation" element={
+            <ProtectedRoute allowedRoles={["vendor"]}>
+              <SubmitQuotation />
+            </ProtectedRoute>
+          } />
+          <Route path="/vendor/my-quotes" element={
+            <ProtectedRoute allowedRoles={["vendor"]}>
+              <MyQuotations />
+            </ProtectedRoute>
+          } />
+          <Route path="/vendor/orders" element={
+            <ProtectedRoute allowedRoles={["vendor"]}>
+              <SupplyOrders />
+            </ProtectedRoute>
+          } />
+          <Route path="/vendor/history" element={
+            <ProtectedRoute allowedRoles={["vendor"]}>
+              <SupplyHistory />
+            </ProtectedRoute>
+          } />
+
           {/* PROJECT DETAILS (CONTRACTOR ONLY) */}
           <Route path="/project/:id" element={
             <ProtectedRoute allowedRoles={["contractor", "customer", "management"]}>
@@ -198,6 +244,7 @@ function AppRoutes() {
             <Route path="notes" element={<InternalNotes />} />
             <Route path="3d-view" element={<ThreeDView />} />
             <Route path="messages" element={<ProjectMessages />} />
+            <Route path="procurement" element={<ProjectProcurement />} />
             {/* Relocated Contractor Features */}
             <Route path="labour-management" element={<LabourManagement />} />
             <Route path="upload-photos" element={<UploadPhotos />} />

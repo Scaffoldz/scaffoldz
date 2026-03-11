@@ -48,6 +48,9 @@ function Sidebar({ onMinimize }) {
               <NavLink to="/contractor/my-bids" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
                 My Bids
               </NavLink>
+              <NavLink to="/contractor/material-requests" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
+                Material Requests
+              </NavLink>
             </div>
           </div>
         )}
@@ -70,6 +73,32 @@ function Sidebar({ onMinimize }) {
               </NavLink>
               <NavLink to="/management/users" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
                 Users
+              </NavLink>
+            </div>
+          </div>
+        )}
+
+        {/* Vendor Section */}
+        {userRole === "vendor" && (
+          <div>
+            <h3 className="text-xs uppercase text-accent/80 font-bold mb-3 px-3 tracking-widest">
+              Vendor
+            </h3>
+            <div className="space-y-1">
+              <NavLink to="/vendor/dashboard" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
+                Dashboard
+              </NavLink>
+              <NavLink to="/vendor/quotations" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
+                Browse Requests
+              </NavLink>
+              <NavLink to="/vendor/my-quotes" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
+                My Quotations
+              </NavLink>
+              <NavLink to="/vendor/orders" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
+                Supply Orders
+              </NavLink>
+              <NavLink to="/vendor/history" className={({ isActive }) => `block px-4 py-2.5 rounded-md transition-all duration-200 text-sm font-medium ${isActive ? "bg-accent text-primary shadow-sm" : "hover:bg-white/5 hover:text-white"}`}>
+                Supply History
               </NavLink>
             </div>
           </div>

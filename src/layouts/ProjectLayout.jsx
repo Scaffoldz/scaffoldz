@@ -18,6 +18,7 @@ function ProjectLayout() {
       { to: "timeline", label: "Track Progress" },
       { to: "budget", label: "Budget Analysis" },
       { to: "payments", label: "Payments" },
+      { to: "procurement", label: "Material Procurement" },
       { to: "3d-view", label: "3D View" }, // Placeholder route
       { to: "messages", label: "Messages" }, // Placeholder route
     ];
@@ -26,6 +27,7 @@ function ProjectLayout() {
       { to: "overview", label: "Work Details" },
       { to: "labour-management", label: "Labour Management" },
       { to: "upload-photos", label: "Upload Photos" },
+      { to: "procurement", label: "Material Procurement" },
       { to: "contact-client", label: "Message Client" },
     ];
   }

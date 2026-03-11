@@ -127,6 +127,7 @@ function Signup() {
                         >
                             <option value="customer">Customer</option>
                             <option value="contractor">Contractor</option>
+                            <option value="vendor">Vendor</option>
                             <option value="management">Management</option>
                         </select>
                     </div>
@@ -175,8 +176,8 @@ function Signup() {
                         />
                     </div>
 
-                    {/* Contractor/Management specific fields */}
-                    {(formData.role === "contractor" || formData.role === "management") && (
+                    {/* Contractor/Management/Vendor specific fields */}
+                    {(formData.role === "contractor" || formData.role === "management" || formData.role === "vendor") && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-semibold text-gray-700">Company Name</label>

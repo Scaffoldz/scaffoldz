@@ -104,6 +104,7 @@ function Login() {
             >
               <option value="customer">Customer</option>
               <option value="contractor">Contractor</option>
+              <option value="vendor">Vendor</option>
               <option value="management">Management</option>
             </select>
           </div>
