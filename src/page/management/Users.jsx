@@ -39,9 +39,6 @@ function Users() {
                         placeholder="Search users..."
                         className="p-2 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-primary outline-none"
                     />
-                    <button className="bg-primary text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors">
-                        Add New User
-                    </button>
                 </div>
             </div>
 
@@ -53,7 +50,6 @@ function Users() {
                             <th className="p-4 border-b border-gray-100">Role</th>
                             <th className="p-4 border-b border-gray-100">Status</th>
                             <th className="p-4 border-b border-gray-100">Last Active</th>
-                            <th className="p-4 border-b border-gray-100 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -71,7 +67,12 @@ function Users() {
                                     </div>
                                 </td>
                                 <td className="p-4">
-                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${u.role === 'Customer' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${
+                                        u.role === 'customer' ? 'bg-blue-50 text-blue-600' : 
+                                        u.role === 'contractor' ? 'bg-amber-50 text-amber-600' :
+                                        u.role === 'management' ? 'bg-purple-50 text-purple-600' :
+                                        u.role === 'vendor' ? 'bg-green-50 text-green-600' :
+                                        'bg-gray-50 text-gray-600'
                                         }`}>
                                         {u.role}
                                     </span>
@@ -80,21 +81,17 @@ function Users() {
                                     <span className={`px-2 py-1 text-[10px] font-bold rounded ${u.status === 'Active' ? 'bg-green-100 text-green-700' :
                                         u.status === 'Suspended' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'
                                         }`}>
-                                        {u.status}
+                                        {u.status || 'Active'}
                                     </span>
                                 </td>
-                                <td className="p-4 text-xs text-gray-500 font-medium">{u.last_login || "Never"}</td>
-                                <td className="p-4 text-right">
-                                    <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button className="text-gray-400 hover:text-primary font-bold text-xs p-1.5 hover:bg-primary/5 rounded">Manage</button>
-                                        <button className="text-gray-400 hover:text-red-600 font-bold text-xs p-1.5 hover:bg-red-50 rounded">Block</button>
-                                    </div>
+                                <td className="p-4 text-xs text-gray-500 font-medium">
+                                    {u.last_login ? new Date(u.last_login).toLocaleDateString() : new Date(u.created_at).toLocaleDateString()}
                                 </td>
                             </tr>
                         ))}
                         {users.length === 0 && (
                             <tr>
-                                <td colSpan="5" className="p-12 text-center text-gray-400 italic">No users found in the system.</td>
+                                <td colSpan="4" className="p-12 text-center text-gray-400 italic">No users found in the system.</td>
                             </tr>
                         )}
                     </tbody>

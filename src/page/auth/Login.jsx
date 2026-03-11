@@ -25,7 +25,7 @@ function Login() {
 
     setLoading(true);
     try {
-      const response = await auth.generateOTP(email, password);
+      const response = await auth.generateOTP(email, password, role);
       setShowOtp(true);
       setOtpMessage(response.message || "OTP sent to your email successfully!");
 
@@ -52,15 +52,40 @@ function Login() {
     setLoading(true);
     try {
       const response = await auth.verifyOTP(email, otp);
+      const actualRole = response.user.role;
 
-      // Store user data
-      localStorage.setItem("userRole", response.user.role);
+      // Validate that the selected role matches the actual account role
+      if (actualRole !== role) {
+        const roleLabels = {
+          customer: "Customer",
+          contractor: "Contractor",
+          vendor: "Vendor",
+          management: "Management",
+        };
+        setError(
+          `Selected role does not match your account role. Your account is registered as "${roleLabels[actualRole] || actualRole}".`
+        );
+        setOtp("");
+        return;
+      }
+
+      // Store user data in localStorage
+      localStorage.setItem("userRole", actualRole);
       localStorage.setItem("userId", response.user.id);
       localStorage.setItem("userName", response.user.fullName);
       localStorage.setItem("userEmail", response.user.email);
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+      }
 
-      // Navigate to appropriate dashboard
-      navigate(`/${response.user.role}/dashboard`);
+      // Redirect to the correct dashboard
+      const dashboardRoutes = {
+        customer: "/customer/dashboard",
+        contractor: "/contractor/dashboard",
+        vendor: "/vendor/dashboard",
+        management: "/management/dashboard",
+      };
+      navigate(dashboardRoutes[actualRole] || "/");
     } catch (err) {
       setError(err.message || "Invalid OTP. Please try again.");
       setOtp(""); // Clear OTP field on error

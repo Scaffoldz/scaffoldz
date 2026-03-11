@@ -17,9 +17,6 @@ function UploadPhotos() {
                     <p className="text-gray-500 mt-1">Upload and organize site images for management review.</p>
                 </div>
                 <div className="flex gap-3">
-                    <button className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition-all border border-gray-200">
-                        Create Album
-                    </button>
                     <button className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-primary/90 transition-all shadow-md">
                         Upload Image
                     </button>

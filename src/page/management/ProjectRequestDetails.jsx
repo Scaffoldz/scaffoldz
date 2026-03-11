@@ -58,6 +58,15 @@ function ProjectRequestDetails() {
         }
     };
 
+    const calculateDuration = (start, end) => {
+        if (!start || !end) return '12';
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        const diffTime = Math.abs(endDate - startDate);
+        const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30.44)); 
+        return diffMonths > 0 ? diffMonths : '1';
+    };
+
     if (loading) return <div className="p-8 text-center text-gray-500">Loading request details...</div>;
     if (error) return <div className="p-8 text-center text-red-500">Error: {error}</div>;
 
@@ -70,8 +79,8 @@ function ProjectRequestDetails() {
             <div className="flex justify-between items-start border-b border-gray-200 pb-4">
                 <div>
                     <h1 className="text-3xl font-bold text-primary">Request #{request.id}</h1>
-                    <p className="text-gray-500 mt-1">Submitted by <span className="font-semibold text-gray-800">{request.customer || "Unknown User"}</span></p>
-                    <p className="text-xs text-gray-400 mt-1">Submitted on: {new Date(request.submittedAt).toLocaleString()}</p>
+                    <p className="text-gray-500 mt-1">Submitted by <span className="font-semibold text-gray-800">{request.customer_name || request.customer || "Unknown User"}</span></p>
+                    <p className="text-xs text-gray-400 mt-1">Submitted on: {new Date(request.created_at || request.createdAt || Date.now()).toLocaleString()}</p>
                 </div>
                 <div className="space-x-3">
                     <button onClick={handleReject} className="px-5 py-2 border border-red-200 text-red-600 rounded-md font-bold hover:bg-red-50 transition-colors">
@@ -110,11 +119,11 @@ function ProjectRequestDetails() {
                     </div>
                     <div>
                         <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Expected Duration</span>
-                        <p className="text-gray-700 font-medium">{request.duration_months || request.durationMonths || '12'} Months</p>
+                        <p className="text-gray-700 font-medium">{calculateDuration(request.start_date || request.startDate, request.deadline)} Months</p>
                     </div>
                     <div>
                         <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Created At</span>
-                        <p className="text-gray-700 font-medium">{new Date(request.created_at || request.createdAt).toLocaleDateString()}</p>
+                        <p className="text-gray-700 font-medium">{new Date(request.created_at || request.createdAt || Date.now()).toLocaleDateString()}</p>
                     </div>
                 </div>
 

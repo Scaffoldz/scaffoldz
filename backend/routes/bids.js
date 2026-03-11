@@ -88,26 +88,46 @@ router.put('/:id/status', authenticate, authorize('management'), async (req, res
         const { id } = req.params;
         const { status } = req.body;
 
-        if (!['Pending', 'Selected', 'Rejected'].includes(status)) {
+        if (!['Pending', 'Selected', 'Rejected', 'Quotation Lost'].includes(status)) {
             return res.status(400).json({ error: 'Invalid status' });
         }
 
-        const result = await query(
-            'UPDATE bids SET status = $1 WHERE id = $2 RETURNING *',
-            [status, id]
-        );
-
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Bid not found' });
-        }
-
-        // If bid is selected, update project
-        if (status === 'Selected') {
-            const bid = result.rows[0];
-            await query(
-                'UPDATE projects SET assigned_contractor_id = $1, status = $2 WHERE id = $3',
-                [bid.contractor_id, 'Assigned', bid.project_id]
+        // Apply transaction for atomic updates if selecting
+        await query('BEGIN');
+        try {
+            const result = await query(
+                'UPDATE bids SET status = $1 WHERE id = $2 RETURNING *',
+                [status, id]
             );
+
+            if (result.rows.length === 0) {
+                await query('ROLLBACK');
+                return res.status(404).json({ error: 'Bid not found' });
+            }
+
+            const bid = result.rows[0];
+
+            // If bid is selected, update project AND set all other bids for this project to 'Quotation Lost'
+            if (status === 'Selected') {
+                await query(
+                    'UPDATE projects SET assigned_contractor_id = $1, status = $2 WHERE id = $3',
+                    [bid.contractor_id, 'Assigned', bid.project_id]
+                );
+
+                await query(
+                    "UPDATE bids SET status = 'Quotation Lost' WHERE project_id = $1 AND id != $2 AND status != 'Rejected'",
+                    [bid.project_id, id]
+                );
+            }
+
+            await query('COMMIT');
+            res.json({
+                message: 'Bid status updated successfully',
+                bid: result.rows[0]
+            });
+        } catch (err) {
+            await query('ROLLBACK');
+            throw err;
         }
 
         res.json({
