@@ -51,10 +51,10 @@ const apiRequest = async (endpoint, options = {}) => {
 
 // Authentication API
 export const auth = {
-    generateOTP: async (email, password) => {
+    generateOTP: async (email, password, role) => {
         return apiRequest('/auth/generate-otp', {
             method: 'POST',
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password, role }),
         });
     },
 
@@ -358,6 +358,33 @@ export const procurement = {
     },
 };
 
+// Labour API
+export const labour = {
+    getByProject: async (projectId) => {
+        return apiRequest(`/labour/project/${projectId}`);
+    },
+
+    add: async (workerData) => {
+        return apiRequest('/labour', {
+            method: 'POST',
+            body: JSON.stringify(workerData),
+        });
+    },
+
+    update: async (id, workerData) => {
+        return apiRequest(`/labour/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(workerData),
+        });
+    },
+
+    delete: async (id) => {
+        return apiRequest(`/labour/${id}`, {
+            method: 'DELETE',
+        });
+    },
+};
+
 export default {
     auth,
     users,
@@ -370,4 +397,5 @@ export default {
     attendance,
     messages,
     procurement,
+    labour,
 };

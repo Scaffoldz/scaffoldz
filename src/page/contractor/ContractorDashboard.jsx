@@ -57,7 +57,7 @@ function ContractorDashboard() {
       </div>
 
       {/* Stats Quick View */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
           <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Active Projects</p>
           <p className="text-3xl font-bold text-primary">{activeCount}</p>
@@ -66,19 +66,11 @@ function ContractorDashboard() {
           <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Total Assigned</p>
           <p className="text-3xl font-bold text-orange-600">{projects.length}</p>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Workers on Site</p>
-          <p className="text-3xl font-bold text-green-600">--</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Next Payment</p>
-          <p className="text-3xl font-bold text-gray-800">₹ --</p>
-        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8">
         {/* Project List */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="space-y-4">
           <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Active Sites</h2>
 
           {projects.length === 0 ? (
@@ -87,7 +79,7 @@ function ContractorDashboard() {
               <Link to="/contractor/available-projects" className="text-primary font-bold hover:underline mt-2 inline-block">Find Work</Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {projects.map((project) => (
                 <div key={project.id} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-primary/30 transition-all group">
                   <div className="flex justify-between items-start mb-4">
@@ -111,18 +103,6 @@ function ContractorDashboard() {
               ))}
             </div>
           )}
-        </div>
-
-        <div className="space-y-4">
-          {/* Recent Notifications placeholder */}
-          <div className="bg-primary/5 p-6 rounded-xl border border-primary/10">
-            <h3 className="text-xs font-bold text-primary uppercase tracking-widest mb-3">Recent Notifications</h3>
-            <div className="space-y-3">
-              <div className="text-xs text-gray-600 pb-2 border-b border-primary/10 text-center py-4 opacity-50">
-                <p>No new notifications</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -146,9 +146,6 @@ function Analytics() {
               <p className="text-center text-gray-500 py-4">No active projects to display efficiency.</p>
             )}
           </div>
-          <button className="mt-8 text-sm text-primary font-bold hover:underline flex items-center justify-center gap-2 border border-gray-100 py-2 rounded-lg">
-            View Full Operational Report →
-          </button>
         </div>
       </div>
     </div>

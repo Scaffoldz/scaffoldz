@@ -9,10 +9,10 @@ const { authenticate } = require('../middleware/auth');
 // Generate and send OTP
 router.post('/generate-otp', async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, role } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({ error: 'Email and password are required' });
+        if (!email || !password || !role) {
+            return res.status(400).json({ error: 'Email, password, and role are required' });
         }
 
         // Check if user exists
@@ -26,6 +26,19 @@ router.post('/generate-otp', async (req, res, next) => {
         }
 
         const user = userResult.rows[0];
+
+        // Validate that the requested role matches the db account role
+        if (user.role !== role) {
+            const roleLabels = {
+                customer: "Customer",
+                contractor: "Contractor",
+                vendor: "Vendor",
+                management: "Management",
+            };
+            return res.status(401).json({ 
+                error: `Selected role does not match your account. Expected: ${roleLabels[user.role] || user.role}.` 
+            });
+        }
 
         // Verify password
         const isValidPassword = await bcrypt.compare(password, user.password_hash);
