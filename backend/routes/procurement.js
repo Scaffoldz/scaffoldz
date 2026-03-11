@@ -51,7 +51,7 @@ router.get('/requests/project/:projectId', authenticate, async (req, res, next) 
 
         // Fetch quotations for these requests
         const requestIds = requests.map(r => r.id);
-        const placeholders = requestIds.map((_, i) => `$${i + 2}`).join(',');
+        const placeholders = requestIds.map((_, i) => `$${i + 1}`).join(',');
         
         const quotationsResult = await query(
             `SELECT vq.*, u.company_name as vendor_name 

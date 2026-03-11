@@ -136,7 +136,7 @@ export default function ProjectProcurement() {
               
               {/* Quotations List */}
               <div className="p-4">
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Vendor Quotations ({request.quotations.length})</h4>
+                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Vendor Quotations ({request.quotations?.length || 0})</h4>
                 
                 {!request.quotations || request.quotations.length === 0 ? (
                   <p className="text-sm text-gray-400 italic">No quotations received yet.</p>

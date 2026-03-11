@@ -1,54 +1,64 @@
 #!/bin/bash
-
 echo "========================================"
 echo "      Scaffoldz Project Setup Script    "
 echo "========================================"
 
 # Check for Node.js
-if ! command -v node &> /dev/null
-then
-    echo "❌ Node.js could not be found. Please install Node.js."
+if ! command -v node &> /dev/null; then
+    echo "❌ Node.js could not be found. Please install Node.js from https://nodejs.org"
     exit 1
 fi
 
 # Check for npm
-if ! command -v npm &> /dev/null
-then
+if ! command -v npm &> /dev/null; then
     echo "❌ npm could not be found. Please install npm."
     exit 1
 fi
 
-echo "✅ Node.js and npm are installed."
+NODE_VERSION=$(node -v)
+NPM_VERSION=$(npm -v)
+echo "✅ Node.js $NODE_VERSION and npm $NPM_VERSION are installed."
 echo ""
 
-# Array of directories containing a package.json (relative to root)
-# The root itself (.) and the backend folder (backend)
-DIRECTORIES=(`.` `backend`)
-
-echo "📦 Installing dependencies across the project..."
-echo ""
-
-# Frontend (root)
-if [ -f "package.json" ]; then
-    echo "➡️ Installing frontend dependencies (React, Vite, Tailwind, etc.)..."
-    npm install
+# === FRONTEND (root) ===
+echo "🔍 [1/2] Checking frontend dependencies..."
+if [ -d "node_modules" ]; then
+    echo "   node_modules already exists. Checking for missing packages..."
+    npm install --prefer-offline
 else
-    echo "⚠️ Frontend package.json not found."
+    echo "   node_modules not found. Installing frontend dependencies..."
+    echo "   (React, Vite, Tailwind CSS, React Router, etc.)"
+    npm install
 fi
-
+echo "   ✅ Frontend: Done."
 echo ""
 
-# Backend
-if [ -d "backend" ] && [ -f "backend/package.json" ]; then
-    echo "➡️ Installing backend dependencies (Express, PostgreSQL, etc.)..."
+# === BACKEND ===
+echo "🔍 [2/2] Checking backend dependencies..."
+if [ -d "backend/node_modules" ]; then
+    echo "   node_modules already exists. Checking for missing packages..."
+    cd backend
+    npm install --prefer-offline
+    cd ..
+else
+    echo "   node_modules not found. Installing backend dependencies..."
+    echo "   (Express, PostgreSQL, bcryptjs, JWT, nodemon, etc.)"
     cd backend
     npm install
     cd ..
-else
-    echo "⚠️ Backend directory or package.json not found."
 fi
+echo "   ✅ Backend: Done."
 
 echo ""
-echo "🎉 Setup complete!"
-echo "👉 To start the project, simply run: npm run dev"
-echo "   (This uses concurrently to start both the Vite frontend and Node/Express backend)"
+echo "========================================"
+echo "🎉 Setup complete! Everything is ready."
+echo ""
+echo "⚠️  IMPORTANT: Make sure backend/.env exists"
+echo "    with your database credentials before starting."
+echo ""
+echo "▶️  To start the full project, run:"
+echo "       npm run dev"
+echo ""
+echo "💡 NOTE: If you see 'port 5000 already in use',"
+echo "         run: lsof -ti:5000 | xargs kill -9"
+echo "========================================"
