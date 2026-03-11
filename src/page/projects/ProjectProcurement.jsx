@@ -33,13 +33,18 @@ export default function ProjectProcurement() {
     }
   };
 
+  const fetchSuggestions = async () => {
+    try {
+      const data = await api.procurement.getProjectSuggestions(projectId);
+      setSuggestionsList(data.suggestions || []);
+    } catch (err) {
+      console.error("Failed to fetch suggestions:", err);
+    }
+  };
+
   useEffect(() => {
     fetchRequests();
-    
-    // Maintain mock customer suggestions for now
-    setSuggestionsList([
-      { id: 1, author: "Customer", text: "Please ensure the material quality meets the project specifications.", date: new Date().toISOString().split("T")[0] }
-    ]);
+    fetchSuggestions();
   }, [projectId]);
 
   const handleAddRequest = async (e) => {
@@ -70,20 +75,18 @@ export default function ProjectProcurement() {
     }
   };
 
-  const handleAddSuggestion = (e) => {
+  const handleAddSuggestion = async (e) => {
     e.preventDefault();
     if (!suggestion.trim()) return;
     
-    const newSuggestion = {
-      id: Date.now(),
-      author: "Customer",
-      text: suggestion,
-      date: new Date().toISOString().split("T")[0]
-    };
-    
-    setSuggestionsList([newSuggestion, ...suggestionsList]);
-    setSuggestion("");
-  };
+    try {
+      await api.procurement.postSuggestion(projectId, suggestion);
+      setSuggestion("");
+      fetchSuggestions(); // Refresh to show new suggestion
+    } catch (err) {
+      alert("Failed to post suggestion: " + err.message);
+    }
+  };;
 
   return (
     <div className="space-y-8 animate-fade-in p-2">
@@ -195,10 +198,10 @@ export default function ProjectProcurement() {
                 suggestionsList.map((sug) => (
                   <div key={sug.id} className="bg-blue-50/50 p-3 rounded border border-blue-100">
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs font-bold text-blue-800">{sug.author}</span>
-                      <span className="text-[10px] text-gray-400">{sug.date}</span>
+                      <span className="text-xs font-bold text-blue-800">{sug.author_name || "Customer"}</span>
+                      <span className="text-[10px] text-gray-400">{new Date(sug.created_at).toLocaleDateString()}</span>
                     </div>
-                    <p className="text-sm text-gray-700">{sug.text}</p>
+                    <p className="text-sm text-gray-700">{sug.suggestion_text}</p>
                   </div>
                 ))
               )}

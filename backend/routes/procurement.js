@@ -304,4 +304,54 @@ router.get('/orders/vendor', authenticate, async (req, res, next) => {
     }
 });
 
+// ==========================================
+// SUGGESTION ROUTES (Customer -> Contractor)
+// ==========================================
+
+// Get all suggestions for a project
+router.get('/suggestions/:projectId', authenticate, async (req, res, next) => {
+    try {
+        const { projectId } = req.params;
+
+        const result = await query(
+            `SELECT ps.*, u.full_name as author_name, u.role as author_role
+             FROM procurement_suggestions ps
+             JOIN users u ON ps.customer_id = u.id
+             WHERE ps.project_id = $1
+             ORDER BY ps.created_at DESC`,
+            [projectId]
+        );
+
+        res.json({ suggestions: result.rows });
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Post a suggestion (customer only)
+router.post('/suggestions', authenticate, async (req, res, next) => {
+    try {
+        const { projectId, suggestionText } = req.body;
+        const { id: customerId, role } = req.user;
+
+        if (role !== 'customer') {
+            return res.status(403).json({ error: 'Only customers can post suggestions.' });
+        }
+
+        if (!projectId || !suggestionText || !suggestionText.trim()) {
+            return res.status(400).json({ error: 'Project ID and suggestion text are required.' });
+        }
+
+        const result = await query(
+            `INSERT INTO procurement_suggestions (project_id, customer_id, suggestion_text)
+             VALUES ($1, $2, $3) RETURNING *`,
+            [projectId, customerId, suggestionText.trim()]
+        );
+
+        res.status(201).json({ suggestion: result.rows[0] });
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = router;

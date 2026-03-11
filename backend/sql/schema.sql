@@ -205,6 +205,15 @@ CREATE TABLE supply_orders (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Procurement Suggestions Table (Customer messages to contractor about materials)
+CREATE TABLE procurement_suggestions (
+    id SERIAL PRIMARY KEY,
+    project_id INTEGER REFERENCES projects(id) ON DELETE CASCADE,
+    customer_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    suggestion_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create indexes for better query performance
 CREATE INDEX idx_projects_customer ON projects(customer_id);
 CREATE INDEX idx_projects_contractor ON projects(assigned_contractor_id);
@@ -219,6 +228,7 @@ CREATE INDEX idx_otps_email ON otps(email);
 CREATE INDEX idx_material_requests_project ON material_requests(project_id);
 CREATE INDEX idx_vendor_quotations_request ON vendor_quotations(request_id);
 CREATE INDEX idx_supply_orders_vendor ON supply_orders(vendor_id);
+CREATE INDEX idx_procurement_suggestions_project ON procurement_suggestions(project_id);
 
 -- Create function to update updated_at timestamp automatically
 CREATE OR REPLACE FUNCTION update_updated_at_column()

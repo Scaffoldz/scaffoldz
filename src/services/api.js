@@ -339,6 +339,19 @@ export const procurement = {
     getVendorOrders: async () => {
         return apiRequest('/procurement/orders/vendor');
     },
+
+    // Customer/Contractor: Get suggestions for a project
+    getProjectSuggestions: async (projectId) => {
+        return apiRequest(`/procurement/suggestions/${projectId}`);
+    },
+
+    // Customer: Post a suggestion
+    postSuggestion: async (projectId, suggestionText) => {
+        return apiRequest('/procurement/suggestions', {
+            method: 'POST',
+            body: JSON.stringify({ projectId, suggestionText }),
+        });
+    },
 };
 
 export default {
