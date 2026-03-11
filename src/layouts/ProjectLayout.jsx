@@ -17,16 +17,14 @@ function ProjectLayout() {
       { to: "overview", label: "Overview" },
       { to: "timeline", label: "Track Progress" },
       { to: "budget", label: "Budget Analysis" },
-      { to: "payments", label: "Payments" },
       { to: "procurement", label: "Material Procurement" },
-      { to: "3d-view", label: "3D View" }, // Placeholder route
-      { to: "messages", label: "Messages" }, // Placeholder route
+      { to: "3d-view", label: "3D View" },
+      { to: "messages", label: "Messages" },
     ];
   } else if (userRole === "contractor") {
     links = [
       { to: "daily-report", label: "📋 Daily Report" },
       { to: "overview", label: "Work Details" },
-      { to: "labour-management", label: "Labour Management" },
       { to: "procurement", label: "Material Procurement" },
       { to: "contact-client", label: "Message Client" },
     ];

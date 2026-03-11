@@ -3,6 +3,23 @@ const router = express.Router();
 const { query } = require('../config/database');
 const { authenticate } = require('../middleware/auth');
 
+// Get distinct registered workers for a project (from attendance history)
+router.get('/project/:projectId/workers', authenticate, async (req, res, next) => {
+    try {
+        const { projectId } = req.params;
+        const result = await query(
+            `SELECT DISTINCT ON (worker_name) worker_name as name, worker_type as type, wage_per_hour as wage
+             FROM attendance
+             WHERE project_id = $1 AND wage_per_hour IS NOT NULL
+             ORDER BY worker_name, attendance_date DESC`,
+            [projectId]
+        );
+        res.json({ workers: result.rows });
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Get attendance for a project
 router.get('/project/:projectId', authenticate, async (req, res, next) => {
     try {

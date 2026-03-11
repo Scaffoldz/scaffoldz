@@ -225,6 +225,10 @@ export const reports = {
     getActualCost: async (projectId) => {
         return apiRequest(`/reports/project/${projectId}/actual-cost`);
     },
+
+    getDailyCosts: async (projectId) => {
+        return apiRequest(`/reports/project/${projectId}/daily`);
+    },
 };
 
 // Material API
@@ -263,6 +267,10 @@ export const attendance = {
         return apiRequest(`/attendance/project/${projectId}${query}`);
     },
 
+    getWorkers: async (projectId) => {
+        return apiRequest(`/attendance/project/${projectId}/workers`);
+    },
+
     mark: async (attendanceData) => {
         return apiRequest('/attendance', {
             method: 'POST',
@@ -280,8 +288,9 @@ export const attendance = {
 
 // Message API
 export const messages = {
-    getByProject: async (projectId) => {
-        return apiRequest(`/messages/project/${projectId}`);
+    getByProject: async (projectId, channel = null) => {
+        const q = channel ? `?channel=${channel}` : '';
+        return apiRequest(`/messages/project/${projectId}${q}`);
     },
 
     send: async (messageData) => {
