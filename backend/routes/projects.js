@@ -3,6 +3,25 @@ const router = express.Router();
 const { query } = require('../config/database');
 const { authenticate, authorize } = require('../middleware/auth');
 
+// Get all open tenders (Bidding status) - for Available Tenders page
+router.get('/tenders', authenticate, async (req, res, next) => {
+    try {
+        const result = await query(
+            `SELECT p.*,
+                    u.full_name as customer_name,
+                    (SELECT COUNT(*) FROM bids WHERE project_id = p.id) as bid_count
+             FROM projects p
+             LEFT JOIN users u ON p.customer_id = u.id
+             WHERE p.status = 'Bidding'
+             ORDER BY p.bidding_deadline ASC`,
+            []
+        );
+        res.json({ projects: result.rows });
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Get all projects (role-based filtering)
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -26,7 +45,7 @@ router.get('/', authenticate, async (req, res, next) => {
       `;
             params = [userId];
         } else if (role === 'contractor') {
-            // Contractors see projects assigned to them or open for bidding
+            // Contractors only see projects that are assigned to them
             queryText = `
         SELECT p.*,
                u.full_name as customer_name,
@@ -34,7 +53,7 @@ router.get('/', authenticate, async (req, res, next) => {
         FROM projects p
         LEFT JOIN users u ON p.customer_id = u.id
         LEFT JOIN users c ON p.assigned_contractor_id = c.id
-        WHERE p.assigned_contractor_id = $1 OR p.status IN ('Bidding', 'Under Review')
+        WHERE p.assigned_contractor_id = $1
       `;
             params = [userId];
         } else {

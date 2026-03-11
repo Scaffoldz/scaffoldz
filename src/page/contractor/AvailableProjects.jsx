@@ -18,7 +18,7 @@ function AvailableProjects() {
         try {
             setLoading(true);
             const [projectsData, bidsData] = await Promise.all([
-                api.projects.getAll('Bidding'),
+                api.projects.getTenders(),
                 api.bids.getMyBids()
             ]);
             setProjects(projectsData.projects);
@@ -61,7 +61,7 @@ function AvailableProjects() {
                 });
                 alert("Bid submitted successfully!");
                 setSelectedProject(null);
-                fetchProjects(); // Refresh the list
+                fetchData(); // Refresh the list
             } catch (err) {
                 alert("Failed to submit bid: " + err.message);
             }

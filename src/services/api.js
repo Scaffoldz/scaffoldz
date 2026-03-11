@@ -105,6 +105,10 @@ export const projects = {
         return apiRequest(`/projects${query}`);
     },
 
+    getTenders: async () => {
+        return apiRequest('/projects/tenders');
+    },
+
     getById: async (id) => {
         return apiRequest(`/projects/${id}`);
     },
