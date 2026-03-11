@@ -62,6 +62,7 @@ import InternalNotes from "../page/projects/InternalNotes";
 import ThreeDView from "../page/projects/ThreeDView";
 import ProjectMessages from "../page/projects/ProjectMessages";
 import ProjectProcurement from "../page/projects/ProjectProcurement";
+import DailyReport from "../page/projects/DailyReport";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -246,6 +247,7 @@ function AppRoutes() {
             <Route path="messages" element={<ProjectMessages />} />
             <Route path="procurement" element={<ProjectProcurement />} />
             {/* Relocated Contractor Features */}
+            <Route path="daily-report" element={<DailyReport />} />
             <Route path="labour-management" element={<LabourManagement />} />
             <Route path="upload-photos" element={<UploadPhotos />} />
             <Route path="contact-client" element={<ContactClient />} />

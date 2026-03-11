@@ -60,7 +60,7 @@ router.get('/:id', authenticate, async (req, res, next) => {
 // Create daily report
 router.post('/', authenticate, async (req, res, next) => {
     try {
-        const { projectId, reportDate, workDone, labourCount, materialsUsed, remarks } = req.body;
+        const { projectId, reportDate, workDone, labourCount, materialsUsed, remarks, dailyCost } = req.body;
         const submittedBy = req.user.id;
 
         if (!projectId || !reportDate || !workDone) {
@@ -68,15 +68,33 @@ router.post('/', authenticate, async (req, res, next) => {
         }
 
         const result = await query(
-            `INSERT INTO reports (project_id, submitted_by, report_date, work_done, labour_count, materials_used, remarks)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+            `INSERT INTO reports (project_id, submitted_by, report_date, work_done, labour_count, materials_used, remarks, daily_cost)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-            [projectId, submittedBy, reportDate, workDone, labourCount, materialsUsed, remarks]
+            [projectId, submittedBy, reportDate, workDone, labourCount, materialsUsed, remarks, dailyCost || 0]
         );
 
         res.status(201).json({
             message: 'Report created successfully',
             report: result.rows[0]
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Get actual total cost spent on a project (sum of all daily report costs)
+router.get('/project/:projectId/actual-cost', authenticate, async (req, res, next) => {
+    try {
+        const { projectId } = req.params;
+        const result = await query(
+            `SELECT COALESCE(SUM(daily_cost), 0) as actual_cost, COUNT(*) as report_count
+             FROM reports WHERE project_id = $1`,
+            [projectId]
+        );
+        res.json({
+            actualCost: Number(result.rows[0].actual_cost),
+            reportCount: Number(result.rows[0].report_count)
         });
     } catch (error) {
         next(error);

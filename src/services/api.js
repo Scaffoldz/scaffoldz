@@ -221,6 +221,10 @@ export const reports = {
             body: JSON.stringify(photoData),
         });
     },
+
+    getActualCost: async (projectId) => {
+        return apiRequest(`/reports/project/${projectId}/actual-cost`);
+    },
 };
 
 // Material API

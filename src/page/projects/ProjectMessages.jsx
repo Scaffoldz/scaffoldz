@@ -47,18 +47,17 @@ function ProjectMessages() {
 
         try {
             const data = await api.messages.send({
-                project_id: id,
-                text: messageText,
-                sender_role: userRole
+                projectId: id,
+                message: messageText
             });
-            setMessages([...messages, data.message]);
+            setMessages(prev => [...prev, data.messageData]);
         } catch (err) {
             alert("Failed to send message: " + err.message);
         }
     };
 
     return (
-        <div className="space-y-8 animate-fade-in p-8 h-[calc(100vh-200px)] flex flex-col">
+        <div className="space-y-8 animate-fade-in p-8 h-[calc(100vh-50px)] flex flex-col">
             <div className="border-b border-gray-200 pb-4">
                 <h1 className="text-3xl font-bold text-primary">Project Communications</h1>
                 <p className="text-gray-500 mt-1">Direct channel between Client and Management team.</p>
@@ -104,10 +103,10 @@ function ProjectMessages() {
                                         <div className={`max-w-md ${isMe ? 'order-1' : 'order-2'}`}>
                                             <div className={`p-4 rounded-2xl shadow-sm text-sm ${isMe ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none'
                                                 }`}>
-                                                {m.text}
+                                                {m.message}
                                             </div>
                                             <p className={`text-[10px] mt-1 font-bold uppercase ${isMe ? 'text-right text-gray-400' : 'text-left text-gray-500'}`}>
-                                                {m.sender_role} • {new Date(m.created_at || m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                {m.sender_name || m.sender_role} • {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                             </p>
                                         </div>
                                     </div>

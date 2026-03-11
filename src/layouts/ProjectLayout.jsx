@@ -24,9 +24,9 @@ function ProjectLayout() {
     ];
   } else if (userRole === "contractor") {
     links = [
+      { to: "daily-report", label: "📋 Daily Report" },
       { to: "overview", label: "Work Details" },
       { to: "labour-management", label: "Labour Management" },
-      { to: "upload-photos", label: "Upload Photos" },
       { to: "procurement", label: "Material Procurement" },
       { to: "contact-client", label: "Message Client" },
     ];
