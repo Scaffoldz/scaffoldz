@@ -84,6 +84,14 @@ export default function VendorDashboard() {
           </div>
           <Link to="/vendor/history" className="text-blue-600 text-sm font-medium hover:underline mt-4 inline-block">View History &rarr;</Link>
         </div>
+
+        <div className="bg-gradient-to-br from-purple-600 to-indigo-600 p-6 rounded-lg shadow-sm border border-purple-500 flex flex-col justify-between hover:shadow-md transition-shadow text-white">
+          <div>
+            <p className="text-sm font-medium text-purple-200 mb-1">AI Bill Generator</p>
+            <h3 className="text-lg font-bold">Create professional bills instantly</h3>
+          </div>
+          <Link to="/vendor/generate-bill" className="bg-white/20 hover:bg-white/30 text-white text-sm font-bold mt-4 inline-block px-3 py-1.5 rounded-lg transition-all">✨ Generate Bill &rarr;</Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

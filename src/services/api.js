@@ -398,6 +398,28 @@ export const labour = {
     },
 };
 
+// Bills API
+export const bills = {
+    generate: async (billData) => {
+        return apiRequest('/bills/generate', {
+            method: 'POST',
+            body: JSON.stringify(billData),
+        });
+    },
+
+    getVendorBills: async () => {
+        return apiRequest('/bills/vendor');
+    },
+
+    getCustomerBills: async () => {
+        return apiRequest('/bills/customer');
+    },
+
+    getById: async (id) => {
+        return apiRequest(`/bills/${id}`);
+    },
+};
+
 export default {
     auth,
     users,
@@ -411,4 +433,5 @@ export default {
     messages,
     procurement,
     labour,
+    bills,
 };

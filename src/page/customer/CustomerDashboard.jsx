@@ -82,9 +82,15 @@ function CustomerDashboard() {
           </h1>
           <p className="text-gray-500 mt-2">Here is an overview of your ongoing construction projects.</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-3 flex-wrap">
           <Link to="/customer/submit-project" className="bg-primary text-white px-6 py-3 rounded-md shadow-sm hover:bg-primary/90 transition-colors font-semibold">
             + Start New Project
+          </Link>
+          <Link to="/customer/reports" className="bg-white border border-gray-200 text-gray-700 hover:border-primary/30 hover:text-primary px-5 py-3 rounded-md transition-all font-semibold shadow-sm flex items-center gap-2">
+            <span>📋</span> View Reports
+          </Link>
+          <Link to="/customer/bills" className="bg-white border border-gray-200 text-gray-700 hover:border-primary/30 hover:text-primary px-5 py-3 rounded-md transition-all font-semibold shadow-sm flex items-center gap-2">
+            <span>🧾</span> View Bills
           </Link>
           <button
             onClick={() => {
@@ -146,9 +152,14 @@ function CustomerDashboard() {
                 </div>
 
                 {project.assigned_contractor_id || ['Assigned', 'In Progress', 'Completed'].includes(project.status) ? (
-                  <Link to={`/project/${project.id}/overview`} className="block w-full text-center py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 hover:shadow-lg transition-all border border-transparent overflow-hidden">
-                    Manage Project Workspace
-                  </Link>
+                  <div className="flex gap-2">
+                    <Link to={`/project/${project.id}/overview`} className="flex-1 text-center py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 hover:shadow-lg transition-all">
+                      Project Workspace
+                    </Link>
+                    <Link to={`/project/${project.id}/reports`} className="flex-1 text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold text-sm hover:border-primary/30 hover:text-primary hover:bg-primary/5 transition-all">
+                      📋 Reports
+                    </Link>
+                  </div>
                 ) : (
                   <button disabled className="block w-full text-center py-3 bg-gray-50 text-gray-400 rounded-xl font-bold text-sm border border-gray-100 cursor-not-allowed">
                     {project.status === 'Bidding' ? 'Waiting for Bidding to Close' : 'Pending Management Approval'}

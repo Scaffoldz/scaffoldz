@@ -18,6 +18,7 @@ import MyProjects from "../page/customer/MyProjects";
 import TrackProgress from "../page/customer/TrackProgress";
 import CustomerPayments from "../page/customer/Payments";
 import Messages from "../page/customer/Messages";
+import CustomerReports from "../page/customer/CustomerReports";
 
 // Contractor Pages
 import ContractorDashboard from "../page/contractor/ContractorDashboard";
@@ -47,6 +48,8 @@ import SubmitQuotation from "../page/vendor/SubmitQuotation";
 import MyQuotations from "../page/vendor/MyQuotations";
 import SupplyOrders from "../page/vendor/SupplyOrders";
 import SupplyHistory from "../page/vendor/SupplyHistory";
+import GenerateBill from "../page/vendor/GenerateBill";
+import ViewBills from "../page/customer/ViewBills";
 
 
 // Project Sub-pages
@@ -123,6 +126,16 @@ function AppRoutes() {
           <Route path="/customer/messages" element={
             <ProtectedRoute allowedRoles={["customer"]}>
               <Messages />
+            </ProtectedRoute>
+          } />
+          <Route path="/customer/reports" element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <CustomerReports />
+            </ProtectedRoute>
+          } />
+          <Route path="/customer/bills" element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <ViewBills />
             </ProtectedRoute>
           } />
 
@@ -225,6 +238,11 @@ function AppRoutes() {
           <Route path="/vendor/history" element={
             <ProtectedRoute allowedRoles={["vendor"]}>
               <SupplyHistory />
+            </ProtectedRoute>
+          } />
+          <Route path="/vendor/generate-bill" element={
+            <ProtectedRoute allowedRoles={["vendor"]}>
+              <GenerateBill />
             </ProtectedRoute>
           } />
 

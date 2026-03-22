@@ -18,6 +18,7 @@ const attendanceRoutes = require('./routes/attendance');
 const messageRoutes = require('./routes/messages');
 const procurementRoutes = require('./routes/procurement');
 const labourRoutes = require('./routes/labour');
+const billRoutes = require('./routes/bills');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -57,6 +58,7 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/procurement', procurementRoutes);
 app.use('/api/labour', labourRoutes);
+app.use('/api/bills', billRoutes);
 
 // 404 handler
 app.use((req, res) => {
