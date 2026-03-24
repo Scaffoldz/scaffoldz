@@ -45,6 +45,30 @@ function ProjectBids() {
         }
     };
 
+    const handleAutoSelect = async () => {
+        const pendingBids = bids.filter(b => b.status === 'Pending');
+        if (pendingBids.length === 0) {
+            alert("No pending bids available for auto-selection.");
+            return;
+        }
+
+        const lowestBid = pendingBids.reduce((min, curr) => 
+            Number(curr.amount) < Number(min.amount) ? curr : min
+        );
+
+        const confirm = window.confirm(`Auto-Select Recommendation:\nThe lowest bid is from ${lowestBid.contractor_name || lowestBid.contractor} for ₹ ${Number(lowestBid.amount).toLocaleString()}.\n\nDo you want to assign the project to them automatically?`);
+
+        if (confirm) {
+            try {
+                await api.bids.updateStatus(lowestBid.id, 'Selected');
+                alert(`Project automatically assigned to ${lowestBid.contractor_name || lowestBid.contractor}!`);
+                navigate("/management/quotations");
+            } catch (err) {
+                alert("Failed to auto-assign project: " + err.message);
+            }
+        }
+    };
+
     if (loading) return <div className="p-8 text-center text-gray-500">Loading bid details...</div>;
     if (error) return <div className="p-8 text-center text-red-500">Error: {error}</div>;
 
@@ -58,6 +82,14 @@ function ProjectBids() {
                 <div>
                     <h1 className="text-3xl font-extrabold text-primary tracking-tight">Bid Review: {quotation.title || quotation.project}</h1>
                     <p className="text-gray-500 mt-1 font-medium">Review Proposals & Manual Contractor Selection</p>
+                    {bids.some(b => b.status === 'Pending') && (
+                        <button 
+                            onClick={handleAutoSelect} 
+                            className="mt-4 bg-green-600 text-white text-xs font-bold px-4 py-2.5 rounded-lg shadow-md hover:bg-green-700 transition-all flex items-center gap-2"
+                        >
+                            <span className="text-lg">⚡</span> Auto-Select Lowest Bid
+                        </button>
+                    )}
                 </div>
                 <div className="text-right">
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Time Remaining</p>
