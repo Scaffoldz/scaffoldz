@@ -32,7 +32,7 @@ import UploadPhotos from "../page/contractor/UploadPhotos";
 import ContactClient from "../page/contractor/ContactClient";
 
 // Management Pages
-import ManagementDashboard from "../page/management/ManagementDashboard";
+import ManagementDashboard from "../page/management/Managementdashboard";
 import Analytics from "../page/management/Analytics";
 import Quotations from "../page/management/Quotations";
 // Placeholders for Management
