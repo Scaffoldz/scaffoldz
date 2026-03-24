@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://3.26.199.155:5000/api';
 
 // Get auth token from localStorage
 const getAuthToken = () => {

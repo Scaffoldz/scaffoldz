@@ -1,0 +1,10 @@
+config:
+  target: "http://scaffoldz.s3-website-ap-southeast-2.amazonaws.com"
+  phases:
+    - duration: 30
+      arrivalRate: 10   # 10 users per second
+
+scenarios:
+  - flow:
+      - get:
+          url: "/"

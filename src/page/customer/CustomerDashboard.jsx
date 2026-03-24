@@ -152,14 +152,9 @@ function CustomerDashboard() {
                 </div>
 
                 {project.assigned_contractor_id || ['Assigned', 'In Progress', 'Completed'].includes(project.status) ? (
-                  <div className="flex gap-2">
-                    <Link to={`/project/${project.id}/overview`} className="flex-1 text-center py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 hover:shadow-lg transition-all">
-                      Project Workspace
-                    </Link>
-                    <Link to={`/project/${project.id}/reports`} className="flex-1 text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold text-sm hover:border-primary/30 hover:text-primary hover:bg-primary/5 transition-all">
-                      📋 Reports
-                    </Link>
-                  </div>
+                  <Link to={`/project/${project.id}/overview`} className="block w-full text-center py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 hover:shadow-lg transition-all">
+                    Project Dashboard
+                  </Link>
                 ) : (
                   <button disabled className="block w-full text-center py-3 bg-gray-50 text-gray-400 rounded-xl font-bold text-sm border border-gray-100 cursor-not-allowed">
                     {project.status === 'Bidding' ? 'Waiting for Bidding to Close' : 'Pending Management Approval'}

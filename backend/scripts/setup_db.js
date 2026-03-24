@@ -13,6 +13,7 @@ const createDatabase = async () => {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: 'postgres', // Connect to default database
+        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
     };
 
     const client = new Client(config);

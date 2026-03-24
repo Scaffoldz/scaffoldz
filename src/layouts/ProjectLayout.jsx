@@ -62,7 +62,7 @@ function ProjectLayout() {
               }}
               className="text-left text-xs text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 font-medium"
             >
-              🚪 Logout Account
+              Logout Account
             </button>
           </div>
         </div>

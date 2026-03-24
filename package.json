@@ -4,14 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run client\" \"npm run server\"",
-    "client": "vite",
-    "server": "cd backend && npm run dev",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+  "dev": "concurrently \"npm run client\" \"npm run server\"",
+  "client": "vite",
+  "server": "cd backend && npm run dev",
+  "build": "vite build",
+  "lint": "eslint .",
+  "preview": "vite preview",
+  "test": "jest"
   },
   "dependencies": {
+    "artillery": "^2.0.30",
     "express": "^5.2.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -31,5 +33,11 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
     "vite": "^7.2.4"
+  },
+  "jest": {
+  "testEnvironment": "jsdom",
+  "transform": {
+    "^.+\\.(js|jsx)$": "babel-jest"
   }
+}
 }
