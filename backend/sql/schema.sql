@@ -64,7 +64,7 @@ CREATE TABLE bids (
     amount DECIMAL(15, 2) NOT NULL,
     duration_months INTEGER,
     proposal TEXT,
-    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Selected', 'Rejected')),
+    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Selected', 'Rejected', 'Quotation Lost')),
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(project_id, contractor_id)
 );
@@ -152,6 +152,7 @@ CREATE TABLE messages (
     project_id INTEGER REFERENCES projects(id) ON DELETE CASCADE,
     sender_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     message TEXT NOT NULL,
+    channel VARCHAR(50),
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

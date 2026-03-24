@@ -7,7 +7,10 @@ function Sidebar({ onMinimize }) {
   return (
     <div className="w-64 bg-primary text-gray-100 flex flex-col h-full shadow-lg z-10 font-sans border-r border-gray-800">
       <div className="p-6 text-xl font-bold border-b border-white/10 tracking-tight flex items-center justify-between">
-        <span className="flex items-center gap-3">Scaffoldz</span>
+        <span className="flex items-center gap-3">
+          <img src="/scaffoldz-logo.png" alt="Scaffoldz Logo" className="w-8 h-8 object-contain drop-shadow-md" />
+          Scaffoldz
+        </span>
         <button
           onClick={onMinimize}
           className="p-1.5 hover:bg-white/10 rounded-md text-white/60 hover:text-white transition-colors"

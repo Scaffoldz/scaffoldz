@@ -98,9 +98,7 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="bg-white p-10 rounded-lg shadow-sm border border-gray-200 w-full max-w-md space-y-8 animate-fade-in">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-primary tracking-tight">
-            Scaffoldz
-          </h2>
+          <img src="/scaffoldz-logo.png" alt="Scaffoldz Logo" className="w-48 h-auto mx-auto object-contain drop-shadow-lg" />
           <p className="text-gray-500 mt-2 text-sm">Sign in to your account</p>
         </div>
 

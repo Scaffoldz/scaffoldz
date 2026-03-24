@@ -6,7 +6,7 @@ function Landing() {
 
       {/* Navbar */}
       <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-sm border-b border-gray-200">
-        <div className="text-2xl font-bold text-primary tracking-tight">Scaffoldz</div>
+        <Link to="/"><img src="/scaffoldz-logo.png" alt="Scaffoldz Logo" className="h-12 w-auto object-contain drop-shadow-sm" /></Link>
         <div className="space-x-4">
           <Link to="/login" className="px-5 py-2 text-primary font-semibold hover:text-primary/80 transition-colors">Login</Link>
           <Link to="/login" className="px-5 py-2 bg-primary text-white rounded-md font-semibold hover:bg-primary/90 transition-transform active:scale-95">Get Started</Link>
